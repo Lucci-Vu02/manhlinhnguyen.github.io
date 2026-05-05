@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminal Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: 'Fira Code', monospace;
+  background: black;
+  color: #00ff9f;
+}
+
+.terminal {
+  padding: 40px;
+  max-width: 900px;
+  margin: auto;
+  white-space: pre-line;
+}
+
+input {
+  background: black;
+  border: none;
+  outline: none;
+  color: #00ff9f;
+  font-family: 'Fira Code', monospace;
+  font-size: 16px;
+  width: 80%;
+}
+
+.line { margin: 5px 0; }
+</style>
+</head>
+<body>
+
+<div class="terminal" id="terminal"></div>
+
+<script>
+const terminal = document.getElementById("terminal");
+
+const intro = [
+"Welcome to NGUYEN MANH LINH's portfolio",
+"",
+"Type 'help' to see available commands",
+"",
+"Available commands:",
+"",
+"👩‍💼 about : Show personal information",
+"💼 experience : Show work experience",
+"🛠 skills : List skills",
+"📜 certs : Show certifications",
+"📧 contact : Show contact information",
+"🧹 clear : Clear terminal",
+"🎨 theme : Toggle light/dark mode",
+""
+];
+
+const data = {
+  about: `NGUYEN | MANH | LINH
+Year of birth: 1997
+Education : Banking Academy
+Specialized: Management Information Systems
+
+Current role:
+- Business Analyst at Techcombank Vietnam`,
+
+  experience: `- Business Analyst / Mar 2023 - present
+Techcombank Vietnam
+
+- Business Analyst / Mar 2021 - Feb 2023
+VNPAY
+
+- Business Analyst / Mar 2019 - Dec 2020
+ETC Technology Systems JSC`,
+
+  skills: `- Information Architecture
+- Testing
+- Systems Integration
+- SQL
+- User Requirements
+- Microsoft Power BI
+- UML
+- UI/UX
+etc...`,
+
+  certs: `- TOEIC 900+ - IIG Vietnam
+- MOS - IIG Vietnam
+- Analyzing and Visualizing Data - Microsoft Power BI`,
+
+  contact: `Phone : 033 3806394
+Facebook: https://facebook.com/manhlinh.nguyen.1803`
+};
+
+let isDark = true;
+
+function printIntro(callback) {
+  intro.forEach(line => {
+    const div = document.createElement("div");
+    div.className = "line";
+    div.textContent = line;
+    terminal.appendChild(div);
+  });
+  callback();
+}
+
+function toggleTheme() {
+  if (isDark) {
+    document.body.style.background = "white";
+    document.body.style.color = "black";
+  } else {
+    document.body.style.background = "black";
+    document.body.style.color = "#00ff9f";
+  }
+  isDark = !isDark;
+}
+
+function createInput() {
+  const wrapper = document.createElement("div");
+  wrapper.className = "line";
+  wrapper.innerHTML = "$ ";
+
+  const input = document.createElement("input");
+  wrapper.appendChild(input);
+  terminal.appendChild(wrapper);
+
+  input.focus();
+
+  input.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      const cmd = input.value.trim();
+      wrapper.innerHTML = "$ " + cmd;
+
+      if (cmd === "clear") {
+        terminal.innerHTML = "";
+        printIntro(createInput);
+        return;
+      }
+
+      if (cmd === "help") {
+        printIntro(createInput);
+        return;
+      }
+
+      if (cmd === "theme") {
+        toggleTheme();
+        createInput();
+        return;
+      }
+
+      if (data[cmd]) {
+        const output = document.createElement("div");
+        output.className = "line";
+        output.textContent = data[cmd];
+        terminal.appendChild(output);
+      } else {
+        const err = document.createElement("div");
+        err.className = "line";
+        err.textContent = "Command not found";
+        terminal.appendChild(err);
+      }
+
+      createInput();
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  });
+}
+
+printIntro(createInput);
+</script>
+
+</body>
+</html>
